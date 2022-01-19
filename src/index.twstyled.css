@@ -392,6 +392,10 @@ video {
     --tw-bg-opacity: 1;
     background-color: rgba(254, 242, 242, var(--tw-bg-opacity))
 }
+.hover\:bg-green-100:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgba(209, 250, 229, var(--tw-bg-opacity))
+}
 .flex {
     display: flex
 }
@@ -407,6 +411,12 @@ video {
 .p-1 {
     padding: 0.25rem
 }
+.w-full {
+    width: 100%
+}
 .w-screen {
     width: 100vw
+}
+.w-max {
+    width: max-content
 }

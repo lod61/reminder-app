@@ -1,41 +1,40 @@
 {
   "search.useIgnoreFiles": false,
   "search.exclude": {
-      "**/.next": true,
-      "**/build": true,
-      "**/node_modules": true,
-      "**/out": true,
-      "**/script.js": true,
-      "**/*-cache": true,
-      "**/dist": true,
-      "yarn.lock": true,
-      "**/*.mdx": true
+    "**/.next": true,
+    "**/build": true,
+    "**/node_modules": true,
+    "**/out": true,
+    "**/script.js": true,
+    "**/*-cache": true,
+    "**/dist": true,
+    "yarn.lock": true,
+    "**/*.mdx": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "editor.formatOnSave": false,
-  "editor.codeActionsOnSaveTimeout": 6000,
+  "editor.formatOnSave": true,
   "css.lint.unknownAtRules": "ignore",
   "eslint.options": {
     "configFile": "./.config/.eslintrc.js"
   },
   "eslint.lintTask.options": "-c ${workspaceRoot}/.config/.eslintrc.js --ext .ts,.js,.tsx .",
-  "eslint.lintTask.enable": true, 
+  "eslint.lintTask.enable": true,
   "[javascript]": {
     "editor.formatOnSave": true
   },
   "[javascriptreact]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "[typescript]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "[typescriptreact]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "[json]": {
-    "editor.formatOnSave": true   
+    "editor.formatOnSave": true
   },
   "eslint.validate": [
     "javascript",
@@ -52,5 +51,5 @@
     "javascript": "javascriptreact",
     "typescript": "javascript",
     "typescriptreact": "javascriptreact"
-  }
+  },
 }
