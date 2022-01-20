@@ -1,4 +1,4 @@
-import { Input, Checkbox, Button } from 'antd';
+import { Input, Checkbox, Tooltip } from 'antd';
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
@@ -12,8 +12,10 @@ export default () => {
   const [FinishedList, setFinishedList] = useState<ListState[]>([]);
   const [value, setValue] = useState<string>('');
   const onPressEnter = () => {
-    setList([...List, { list: value, status: false, id: nanoid() }]);
-    setValue('');
+    if (value.trim().length > 0) {
+      setList([...List, { list: value, status: false, id: nanoid() }]);
+      setValue('');
+    }
   };
   const selectItem = (e: any, item: ListState, i: number, ing: boolean) => {
     if (ing) {
@@ -33,6 +35,10 @@ export default () => {
     }
   };
 
+  const setV = (e: any) => {
+    setValue(e.target.value);
+  };
+
   return (
     <div tw="p-1">
       <b>todo list</b>
@@ -42,18 +48,18 @@ export default () => {
         onPressEnter={onPressEnter}
         placeholder="添加任务"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={setV}
       />
       {List.map((item: ListState, index: number) => {
         return (
-          <div tw="p-1 hover:bg-green-100" key={index}>
-            <Checkbox
-              style={{ display: 'flex' }}
-              checked={item.status}
-              onChange={(e) => selectItem(e, item, index, true)}
-            >
-              <li tw="ml-2 w-full">{item.list}</li>
-            </Checkbox>
+          <div tw="p-1 hover:bg-green-100 cursor-pointer" key={index}>
+            <Tooltip title="标记为已完成" color={'cyan'}>
+              <Checkbox
+                checked={item.status}
+                onChange={(e) => selectItem(e, item, index, true)}
+              ></Checkbox>
+            </Tooltip>
+            <span tw="ml-2 w-full">{item.list}</span>
           </div>
         );
       })}
@@ -61,15 +67,13 @@ export default () => {
       {FinishedList.map((item: ListState, index: number) => {
         return (
           <div tw="p-1 hover:bg-green-100" key={index}>
-            <Checkbox
-              style={{ display: 'flex' }}
-              checked={item.status}
-              onChange={(e) => selectItem(e, item, index, false)}
-            >
-              <div tw="flex w-max">
-                <li tw="ml-2 w-full">{item.list}</li>
-              </div>
-            </Checkbox>
+            <Tooltip title="标记为未完成" color={'cyan'}>
+              <Checkbox
+                checked={item.status}
+                onChange={(e) => selectItem(e, item, index, false)}
+              ></Checkbox>
+            </Tooltip>
+            <span tw="ml-2 w-full">{item.list}</span>
           </div>
         );
       })}
