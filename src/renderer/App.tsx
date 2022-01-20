@@ -31,7 +31,7 @@ function App() {
         </div>
       </motion.div> */}
     </div>
-  );
+  )
 }
 
 export default App
