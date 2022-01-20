@@ -1,35 +1,38 @@
-import { Input, Checkbox, Rate } from 'antd';
+import { Input, Checkbox, Button } from 'antd';
 import { useState } from 'react';
+import { nanoid } from 'nanoid';
 
 interface ListState {
   list: string;
   status: boolean;
+  id: string;
 }
 export default () => {
   const [List, setList] = useState<ListState[]>([]);
   const [FinishedList, setFinishedList] = useState<ListState[]>([]);
   const [value, setValue] = useState<string>('');
   const onPressEnter = () => {
-    setList([...List, { list: value, status: false }]);
+    setList([...List, { list: value, status: false, id: nanoid() }]);
     setValue('');
   };
   const selectItem = (e: any, item: ListState, i: number, ing: boolean) => {
     if (ing) {
       if (e.target.checked) {
         setFinishedList([...FinishedList, { ...item, status: true }]);
-        setList(List.filter((item: ListState) => item.list !== List[i].list));
+        setList(List.filter((item: ListState) => item.id !== List[i].id));
       }
     } else {
       if (!e.target.checked) {
         setList([...List, { ...item, status: false }]);
         setFinishedList(
           FinishedList.filter(
-            (item: ListState) => item.list !== FinishedList[i].list
+            (item: ListState) => item.id !== FinishedList[i].id
           )
         );
       }
     }
   };
+
   return (
     <div tw="p-1">
       <b>todo list</b>
