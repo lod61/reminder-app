@@ -1,17 +1,14 @@
 import { Input, Checkbox, Tooltip } from 'antd'
 import { useState } from 'react'
 import { nanoid } from 'nanoid'
+import { ListState } from './types'
+import TodoChild from './todoChild'
 
-interface ListState {
-  list: string
-  status: boolean
-  id: string
-}
 export default () => {
   const [List, setList] = useState<ListState[]>([])
   const [FinishedList, setFinishedList] = useState<ListState[]>([])
   const [value, setValue] = useState<string>('')
-  const onPressEnter = () => {
+  const onPressEnter = (value: string) => {
     if (value.trim().length > 0) {
       setList([...List, { list: value, status: false, id: nanoid() }])
       setValue('')
@@ -39,21 +36,31 @@ export default () => {
     setValue(e.target.value)
   }
 
+  const [todoItem, setTodoItem] = useState<ListState | undefined>()
+
+  // children todo
+  const childrenChange = (e: string) => {}
   return (
-    <div tw="p-1 flex justify-between">
-      <div tw={`hover:bg-green-100 flex-auto w-9/12`}>
+    <div tw="p-1 flex justify-between bg-green-50">
+      <div tw={`flex-auto w-9/12`}>
         <b>todo list</b>
         <Input
           prefix="+"
           bordered={false}
-          onPressEnter={onPressEnter}
+          onPressEnter={(e) => onPressEnter(e.target.value)}
           placeholder="添加任务"
           value={value}
           onChange={setV}
         />
         {List.map((item: ListState, index: number) => {
           return (
-            <div tw="p-1 hover:bg-green-100 cursor-pointer" key={index}>
+            <div
+              tw="p-1 hover:bg-green-100 cursor-pointer"
+              key={index}
+              onClick={() => {
+                setTodoItem(item)
+              }}
+            >
               <Tooltip title="标记为已完成" color={'cyan'}>
                 <Checkbox
                   checked={item.status}
@@ -79,12 +86,9 @@ export default () => {
           )
         })}
       </div>
-      {
-        <div tw="bg-white w-3/12 p-4">
-          <Input bordered={false} />
-          <Input prefix="+" bordered={false} placeholder="下一步" />
-        </div>
-      }
+      {todoItem && (
+        <TodoChild todoItem={todoItem} changeValue={(e) => childrenChange(e)} />
+      )}
     </div>
   )
 }
