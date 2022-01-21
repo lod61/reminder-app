@@ -1,5 +1,5 @@
 import { Input, Checkbox, Tooltip } from 'antd'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
 import { ListState } from './types'
 import TodoChild from './todoChild'
@@ -14,9 +14,14 @@ export default () => {
       setValue('')
     }
   }
-  const selectItem = (e: any, item: ListState, i: number, ing: boolean) => {
+  const selectItem = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: ListState,
+    i: number,
+    ing: boolean
+  ) => {
     if (ing) {
-      if (e.target.checked) {
+      if (e?.target?.checked) {
         setFinishedList([...FinishedList, { ...item, status: true }])
         setList(List.filter((item: ListState) => item.id !== List[i].id))
       }
@@ -32,7 +37,7 @@ export default () => {
     }
   }
 
-  const setV = (e: any) => {
+  const setV = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
 
