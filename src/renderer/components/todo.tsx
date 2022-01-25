@@ -1,40 +1,29 @@
-import { Input, Checkbox, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
+// import Store from 'electron-store'
 import { ListState } from './types'
 import TodoChild from './todoChild'
+import { Input, Checkbox, Tooltip } from '~antd'
 
 export default () => {
   const [List, setList] = useState<ListState[]>([])
-  const [FinishedList, setFinishedList] = useState<ListState[]>([])
   const [value, setValue] = useState<string>('')
   const onPressEnter = (value: string) => {
     if (value.trim().length > 0) {
       setList([...List, { list: value, status: false, id: nanoid() }])
+      // console.log(Store)
       setValue('')
     }
   }
-  const selectItem = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    item: ListState,
-    i: number,
-    ing: boolean
-  ) => {
-    if (ing) {
-      if (e?.target?.checked) {
-        setFinishedList([...FinishedList, { ...item, status: true }])
-        setList(List.filter((item: ListState) => item.id !== List[i].id))
-      }
-    } else {
-      if (!e.target.checked) {
-        setList([...List, { ...item, status: false }])
-        setFinishedList(
-          FinishedList.filter(
-            (item: ListState) => item.id !== FinishedList[i].id
-          )
-        )
-      }
-    }
+  const toggleItem = (e: React.ChangeEvent<HTMLInputElement>, i: ListState) => {
+    setList(
+      List.map((item) => {
+        if (item.id === i.id) {
+          return { ...item, status: e.target.checked }
+        }
+        return item
+      })
+    )
   }
 
   const setV = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,23 +34,39 @@ export default () => {
 
   // children todo
   const childrenChange = (e: string) => {}
+
+  const addChild = (rtItem: ListState[]) => {
+    console.log(rtItem, List)
+    const rtList = List.map((item) => {
+      if (item.id === rtItem.id) {
+        item = rtItem
+      }
+      return item
+    })
+    console.log(rtList)
+    setList(rtList)
+    setTodoItem(rtItem)
+  }
+
   return (
-    <div tw="p-1 flex justify-between bg-green-50">
+    <div tw="p-1 flex justify-between bg-green-50 h-screen">
       <div tw={`flex-auto w-9/12`}>
         <b>todo list</b>
         <Input
           prefix="+"
           bordered={false}
-          onPressEnter={(e) => onPressEnter(e.target.value)}
+          onPressEnter={(e) =>
+            onPressEnter((e.target as HTMLInputElement).value)
+          }
           placeholder="添加任务"
           value={value}
           onChange={setV}
         />
-        {List.map((item: ListState, index: number) => {
+        {List.filter((e) => !e.status).map((item: ListState) => {
           return (
             <div
               tw="p-1 hover:bg-green-100 cursor-pointer"
-              key={index}
+              key={item.id}
               onClick={() => {
                 setTodoItem(item)
               }}
@@ -69,21 +74,29 @@ export default () => {
               <Tooltip title="标记为已完成" color={'cyan'}>
                 <Checkbox
                   checked={item.status}
-                  onChange={(e) => selectItem(e, item, index, true)}
+                  onChange={(e: any) => toggleItem(e, item)}
                 ></Checkbox>
               </Tooltip>
               <span tw="ml-2 w-full">{item.list}</span>
             </div>
           )
         })}
-        {FinishedList.length > 0 && <em>FinishedList {FinishedList.length}</em>}
-        {FinishedList.map((item: ListState, index: number) => {
+        {List.filter((e) => e.status).length > 0 && (
+          <em>已完成 {List.filter((e) => e.status).length}</em>
+        )}
+        {List.filter((e) => e.status).map((item: ListState) => {
           return (
-            <div tw="p-1 hover:bg-green-100 cursor-pointer" key={index}>
+            <div
+              tw="p-1 hover:bg-green-100 cursor-pointer"
+              key={item.id}
+              onClick={() => {
+                setTodoItem(item)
+              }}
+            >
               <Tooltip title="标记为未完成" color="cyan">
                 <Checkbox
                   checked={item.status}
-                  onChange={(e) => selectItem(e, item, index, false)}
+                  onChange={(e: any) => toggleItem(e, item)}
                 ></Checkbox>
               </Tooltip>
               <span tw="ml-2 w-full">{item.list}</span>
@@ -92,7 +105,11 @@ export default () => {
         })}
       </div>
       {todoItem && (
-        <TodoChild todoItem={todoItem} changeValue={(e) => childrenChange(e)} />
+        <TodoChild
+          todoItem={todoItem}
+          changeValue={(e: any) => childrenChange(e)}
+          addChild={addChild}
+        />
       )}
     </div>
   )
