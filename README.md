@@ -1,4 +1,6 @@
-# Electron 11 + TypeScript 4.0 + Vite 2 + React 17 + Tailwind 2 + twstyled starter
+# Just a demo build electron todo project. 
+
+## Electron 11 + TypeScript 4.0 + Vite 2 + React 17 + Tailwind 2 + twstyled starter
 
 ![Electron + Vite + React Starter](https://github.com/twstyled/electron-vite-react/blob/main/public/screenshot.png)
 
